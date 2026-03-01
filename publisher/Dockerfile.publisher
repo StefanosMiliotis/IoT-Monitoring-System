@@ -1,0 +1,14 @@
+#ελαφρια εκδοση python
+FROM python:3.11-slim 
+
+# set working directory
+WORKDIR /usr/src
+
+#install paho-mqtt
+RUN pip install --no-cache-dir paho-mqtt
+
+#αντιγραφη του publisher.py στον φακελο /usr/src του container 
+COPY publishers.py .
+
+#εκτελεση 
+CMD ["python", "-u", "publishers.py"]
