@@ -52,6 +52,7 @@ services:
 
   subscriber: 
     build:
+      context: ./subscriber #φακελος
       dockerfile: Dockerfile.subscriber #αρχειο με οδηγιες για subscriber
     environment:
       MQTT_BROKER: mosquitto
