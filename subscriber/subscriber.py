@@ -1,5 +1,5 @@
 # python 3.11
-
+import os 
 import random
 import json
 import psycopg2
@@ -15,11 +15,11 @@ client_id = f'subscriber-{random.randint(0, 100)}'
 # username = 'emqx'
 # password = 'public'
 
-# Στοιχεία σύνδεσης για τη βάση foo
-DB_NAME = "foo"
-DB_USER = "postgres"
-DB_PASS = "postgres"
-DB_HOST = "db"
+#στοιχεια database απο το docker-compose 
+DB_NAME = os.environ.get("DB_NAME", "foo")
+DB_USER = os.environ.get("DB_USER", "postgres")
+DB_PASS = os.environ.get("DB_PASS", "postgres")
+DB_HOST = os.environ.get("DB_HOST", "db")
 
 # Ομαδοποίηση στοιχείων σύνδεσης σε dictionary
 DB_PARAMS = {
@@ -41,7 +41,7 @@ def connect_db():
             time.sleep(2)
 
 def connect_mqtt() -> mqtt_client:
-    def on_connect(client, userdata, flags, rc):
+    def on_connect(client, userdata, flags, rc, properties=None):
         #rc = return code
         if rc == 0: #επιτυχης συνδεση
             print("Connected to MQTT Broker!")
@@ -52,11 +52,20 @@ def connect_mqtt() -> mqtt_client:
             # rc = 4/5: Πρόβλημα με Username/Password
             print("Failed to connect, return code %d\n", rc)
 
-    client = mqtt_client.Client(client_id) #δινουμε ονομα στον subscriber
+    client = mqtt_client.Client(client_id=client_id, callback_api_version=mqtt_client.CallbackAPIVersion.VERSION2)#ονομα στον subscriber
+
     # client.username_pw_set(username, password)
     client.on_connect = on_connect
     #συνδεση στον broker , mosquitto & port 1883
-    client.connect(broker, port)
+ # Δοκιμάζει να συνδεθεί μέχρι να το πετύχει
+    while True:
+        try:
+            client.connect(broker, port)
+            break
+        except ConnectionRefusedError:
+            print("MQTT Broker not ready yet, retrying in 2 seconds...")
+            time.sleep(2)
+            
     return client
 
 #συναρτηση που αποφασιζει τι θα γινει καθε φορα που ενας αισθητηρας στελνει δεδομενα
@@ -71,8 +80,10 @@ def subscribe(client: mqtt_client, db_conn):
             cur = db_conn.cursor()
 
             #sql insert
-            query = "INSERT INTO sensors_data (time, device_id, value) VALUES (NOW(), %s, %s)"
-            cur.execute(query, (data['device_name'], data['value']))
+            #ονοματα στηλων : timestamp, device_name, value
+            query = "INSERT INTO sensors_data (timestamp, device_name, value) VALUES (%s, %s, %s)"
+            #timestamp απο JSON
+            cur.execute(query, (data['timestamp'], data['device_name'], data['value']))
 
             #commit - σωζει αλλαγες
             db_conn.commit()
