@@ -5,10 +5,11 @@ FROM python:3.11-slim
 WORKDIR /usr/src
 
 #install paho-mqtt
-RUN pip install --no-cache-dir paho-mqtt
+RUN pip install --no-cache-dir paho-mqtt psycopg2-binary  
+#βιβλιοθηκη 'psycopg2-binary' χρειαζεται για timescaleDB *
 
 #αντιγραφη του publisher.py στον φακελο /usr/src του container 
-COPY subscribers.py .
+COPY subscriber.py .
 
 #εκτελεση 
-CMD ["python", "-u", "subscribers.py"]
+CMD ["python", "-u", "subscriber.py"]
