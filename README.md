@@ -7,7 +7,7 @@ Collection of sensor measurements with MQTT, storage in TimescaleDB, and retriev
 
 **Data Flow :**
 
-Publishers (Sensors) → Mosquitto Broker → Subscriber → TimescaleDB ← FastAPI ← End User**
+Publishers (Sensors) → Mosquitto Broker → Subscriber → TimescaleDB ← FastAPI ← End User
 
 ![Screenshot](pipeline.png)
 
