@@ -50,6 +50,7 @@ Once containers are up , open the following in your browser :
 
 ![Screenshot](docs.png)
 
+## Current Stage 
 
 **26/02/2026**
 * **Completed `docker-compose.yml`**
