@@ -1,14 +1,16 @@
 from fastapi import FastAPI
-from psydantic import BaseModel #for data validation and settings management
+from pydantic import BaseModel 
 import os 
 import psycopg2 
+from psycopg2.extras import RealDictCursor 
+import time
 
 app = FastAPI()  #δημιουργια αντικειμενου εφαρμογης fastapi , πανω του οριζονται τα endpoints 
 # Database connection parameters from environment variables
-DB_HOST = os.getenv("DB_HOST", "timescaledb") 
-DB_NAME = os.getenv("DB_NAME", "iot_db") 
-DB_USER = os.getenv("DB_USER", "user") 
-DB_PASS = os.getenv("DB_PASS", "password") 
+DB_HOST = os.getenv("DB_HOST", "db") 
+DB_NAME = os.getenv("DB_NAME", "foo") 
+DB_USER = os.getenv("DB_USER", "postgres") 
+DB_PASS = os.getenv("DB_PASS", "postgres") 
 
 def get_db_connection(): 
 #με docker-compose up , το docker προσπαθει να συνδεθει στην database ,
