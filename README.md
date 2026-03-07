@@ -2,11 +2,9 @@
 MQTT-based Sensor Monitoring System with TimescaleDB
 
 ## Architecture 
-Collection of sensor measurements with MQTT, storage in TimescaleDB, and retrieval through FastAPI.
+Collection of sensor measurements with MQTT, storage in TimescaleDB, and retrieval through FastAPI. CPU and RAM metrics tracking with Grafana.
 
 **Data Flow :**
-
-Publishers (Sensors) → Mosquitto Broker → Subscriber → TimescaleDB ← FastAPI ← End User
 
 ![Screenshot](pipeline.png)
 
@@ -16,6 +14,7 @@ Publishers (Sensors) → Mosquitto Broker → Subscriber → TimescaleDB ← Fas
 * **REST API:** Built with [FastAPI](https://fastapi.tiangolo.com/) , it has 2 endpoints :
     * **/raw/data** returns raw data of sensor records.
     * **/sum/data** returns sum of those values.
+* **Monitoring:** Track CPU and RAM metrics of all containers in real time. cAdvisor collects container metrics , Prometheus saves them and Grafana handles the visualization
 
 ## How to Run
 1. Clone the repo :
@@ -51,27 +50,35 @@ Once containers are up , open the following in your browser :
 
 ![Screenshot](docs.png)
 
+4. Access Grafana Monitoring
+Open the following in your browser : 
+* **http://localhost:3000**
+    * username : admin
+    * password : admin
+
+![Screenshot](metrics.png)
+
 ## Current Stage 
 
 **26/02/2026**
 * **Completed `docker-compose.yml`**
 
 **27/02/2026 MQTT Publisher**
-* implemented `publisher.py` with paho-mqtt library 2.0 version [EMQX Guide](https://www.emqx.com/en/blog/how-to-use-mqtt-in-python)
+* implemented **`publisher.py`** with paho-mqtt library 2.0 version [EMQX Guide](https://www.emqx.com/en/blog/how-to-use-mqtt-in-python)
 * json payload (device_name, timestamp{ISO 8601 UTC})
 
-**28/02/2026 Completion of publisher.py**
+**28/02/2026 Completion of `publisher.py`**
 
 **01/03/2026 Dockerfile for publisher & subscriber**
 
 **03/03/2026 Backend Completion**
-* **-update mosquitto.conf**
-* **-update publishers.py**
-* **-add & complete subscribers.py**
+* **-update `mosquitto.conf`**
+* **-update `publishers.py`**
+* **-add & complete `subscribers.py`**
 * **-database setup: creation of sensors_data table and conversion to hypertable** [TimescaleDB](https://www.tigerdata.com/docs/self-hosted/latest/install/installation-docker)
 * **-fixed bugs :**
     * **Connection Refused (Mosquitto)**
-        broker was rejecting connections, solved via mosquitto.conf
+        broker was rejecting connections, solved via `mosquitto.conf`
     * **Container Race Condition**
         python scripts were starting before mosquitto broker loaded, solved with try...except + time.sleep(2)
     * **Paho-MQTT v2 Compatibility**
@@ -80,3 +87,8 @@ Once containers are up , open the following in your browser :
         sql query in the subscriber was using NOW() from database instead of timestamp from sensor JSON
 
 **06/03/2026 Rest API Implementation**
+
+**07/03/2026 Grafana Implementation**
+* Built a custom dashboard with the following queries : 
+    * `rate(container_cpu_usage_seconds_total[1m])`
+    * `container_memory_usage_bytes`
