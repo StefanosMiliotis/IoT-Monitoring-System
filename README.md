@@ -28,7 +28,7 @@ docker-compose up --build -d
 ```
 3. **Access API :**
 
-    Once containers are up , open the following in your browser : 
+Once containers are up , open the following in your browser : 
     * **Swagger UI: http://localhost:8000/docs**
     * **Redoc: http://localhost:8000/redoc**
 
@@ -53,7 +53,7 @@ docker-compose up --build -d
 
 4. **Access Grafana Monitoring :**
 
-    Open the following in your browser : 
+Open the following in your browser : 
     * **http://localhost:3000**
         * username : admin
         * password : admin
