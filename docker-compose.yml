@@ -74,19 +74,19 @@ services:
     depends_on: 
       - db # Εξασφαλίζει ότι το API ξεκινάει αφού έχει ξεκινήσει η βάση
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+  cadvisor: #για monitoring των containers και του host συστήματος
+    image: gcr.io/cadvisor/cadvisor:latest 
     container_name: cadvisor
     ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
+      - "8080:8080" #port που χρησιμοποιει το cadvisor για να δειχνει τα metrics του
+    volumes: #τα volumes που χρειάζεται το cadvisor για να έχει πρόσβαση σε πληροφορίες του host συστήματος και των containers
+      - /:/rootfs:ro 
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
 
-  prometheus:
+  prometheus: #για συλλογή metrics απο cadvisor και node exporter
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
@@ -94,7 +94,7 @@ services:
     ports:
       - "9090:9090"
 
-  grafana:
+  grafana: #για visualization των metrics που συλλέγει το prometheus
     image: grafana/grafana:latest
     container_name: grafana
     ports:
@@ -102,7 +102,7 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 
-  node-exporter:
+  node-exporter: #για συλλογή metrics του host συστήματος 
     image: prom/node-exporter:latest
     container_name: node-exporter
     ports:
