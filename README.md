@@ -17,16 +17,17 @@ Collection of sensor measurements with MQTT, storage in TimescaleDB, and retriev
 * **Monitoring:** Track CPU and RAM metrics of all containers in real time. cAdvisor collects container metrics , Prometheus saves them and Grafana handles the visualization
 
 ## How to Run
-1. Clone the repo :
+1. **Clone the repo :**
 ```bash
 git clone https://github.com/StefanosMiliotis/test_data-monitoring-system.git
 cd test_data-monitoring-system
 ```
-2. Start the system with Docker Compose : 
+2. **Start the system with Docker Compose :**
 ```bash
 docker-compose up --build -d
 ```
-3. Access API 
+3. **Access API :**
+
 Once containers are up , open the following in your browser : 
 * **Swagger UI: http://localhost:8000/docs**
 * **Redoc: http://localhost:8000/redoc**
@@ -50,7 +51,7 @@ Once containers are up , open the following in your browser :
 
 ![Screenshot](docs.png)
 
-4. Access Grafana Monitoring
+4. **Access Grafana Monitoring :**
 Open the following in your browser : 
 * **http://localhost:3000**
     * username : admin
