@@ -80,10 +80,10 @@ def subscribe(client: mqtt_client, db_conn):
             cur = db_conn.cursor()
 
             #sql insert
-            #ονοματα στηλων : timestamp, device_name, value
-            query = "INSERT INTO sensors_data (timestamp, device_name, value) VALUES (%s, %s, %s)"
+            #ονοματα στηλων : timestamp, device_name, payload
+            query = "INSERT INTO sensors_data (timestamp, device_name, payload) VALUES (%s, %s, %s)"
             #timestamp απο JSON
-            cur.execute(query, (data['timestamp'], data['device_name'], data['value']))
+            cur.execute(query, (data['timestamp'], data['device_name'], json.dumps({'value': data['value']})))
 
             #commit - σωζει αλλαγες
             db_conn.commit()

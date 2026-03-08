@@ -16,6 +16,7 @@ services:
     ports:
       - "5432:5432" #port standard 
     volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql #volume map για να τρεξει το αρχικο sql script που δημιουργει τον πινακα στην βαση δεδομενων
       - ./db_data:/var/lib/postgresql/data #μονιμη αποθηκευση δεδομενων 
 
   publisher_1:
@@ -101,6 +102,8 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
   node-exporter: #για συλλογή metrics του host συστήματος 
     image: prom/node-exporter:latest
