@@ -61,6 +61,10 @@ Open the following in your browser :
 
 ![Screenshot](metrics.png)
 
+5. **End the system :**
+```bash
+docker-compose down -v
+```
 ## Current Stage 
 
 **26/02/2026**
