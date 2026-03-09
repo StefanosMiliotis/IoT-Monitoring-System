@@ -57,7 +57,7 @@ Open the following in your browser :
 * **http://localhost:3000**
     * username : admin
     * password : admin
-* **Click on Dashboards**
+* **Click on "Dashboards"**
 
 ![Screenshot](metrics.png)
 
