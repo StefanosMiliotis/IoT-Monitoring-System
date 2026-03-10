@@ -12,7 +12,7 @@ DB_NAME = os.getenv("DB_NAME", "foo")
 DB_USER = os.getenv("DB_USER", "postgres") 
 DB_PASS = os.getenv("DB_PASS", "postgres") 
 
-def get_db_connection(): 
+def get_db_connection():  # συναρτηση για συνδεση στο database
 # #με docker-compose up , το docker προσπαθει να συνδεθει στην database ,
 # #αν δεν ειναι ετοιμη θα περιμενει και θα ξαναπροσπαθησει μετα απο 2 δευτερολεπτα
 # #fastapi ειναι πιο ελαφρυ απο timescaledb οποτε ξεκιναει πιο γρηγορα
@@ -29,7 +29,7 @@ def get_db_connection():
             print(f"Waiting for database... {e}")
             time.sleep(2)
 
-class DataQuery(BaseModel): 
+class DataQuery(BaseModel):  #data validation class
 # #δημιουργια κλασης DataQuery που κληρονομει απο BaseModel της βιβλιοθηκης Pydantic
 # #για να ορισουμε το format των δεδομενων που θα λαμβανουμε απο τα αιτηματα στο endpoint /query
     device_name: str #ονομα της συσκευης που θελουμε να αναζητησουμε
